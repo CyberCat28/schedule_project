@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Группы{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Группы</h1>
+    
+    <!-- форма добавления/редактирования -->
+    <div class="form-section">
+        <h2 id="formTitle">Добавить группу</h2>
+        <form id="groupForm">
+            <input type="hidden" id="groupId">
+            <div class="form-group">
+                <label>Название группы:</label>
+                <input type="text" id="groupName" required placeholder="П-21">
+            </div>
+            <div class="form-group">
+                <label>Специальность:</label>
+                <input type="text" id="groupSpeciality" required placeholder="Программирование">
+            </div>
+            <div class="form-group">
+                <label>Курс:</label>
+                <input type="number" id="groupCourse" min="1" max="4" required>
+            </div>
+            <button type="submit" class="btn">Сохранить</button>
+            <button type="button" id="cancelBtn" class="btn btn-secondary">Отмена</button>
+        </form>
+    </div>
+    
+    <!-- cписок групп -->
+    <div class="list-section">
+        <h2>Список групп</h2>
+        <div id="groupsList" class="cards-container"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/groups.js') }}"></script>
+{% endblock %}

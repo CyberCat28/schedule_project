@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Дисциплины{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Дисциплины</h1>
+    
+    <!-- форма добавления/редактирования -->
+    <div class="form-section">
+        <h2 id="formTitle">Добавить дисциплину</h2>
+        <form id="subjectForm">
+            <input type="hidden" id="subjectId">
+            <div class="form-group">
+                <label>Название:</label>
+                <input type="text" id="subjectName" required placeholder="Информатика">
+            </div>
+            <div class="form-group">
+                <label>Сокращённое название:</label>
+                <input type="text" id="subjectShortName" required placeholder="ИНФ" maxlength="10">
+            </div>
+            <div class="form-group">
+                <label>Преподаватель:</label>
+                <select id="subjectTeacher">
+                    <option value="">Не выбран</option>
+                </select>
+            </div>
+            <button type="submit" class="btn">Сохранить</button>
+            <button type="button" id="cancelBtn" class="btn btn-secondary">Отмена</button>
+        </form>
+    </div>
+    
+    <!-- список дисциплин -->
+    <div class="list-section">
+        <h2>Список дисциплин</h2>
+        <div id="subjectsList" class="cards-container"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/subjects.js') }}"></script>
+{% endblock %}

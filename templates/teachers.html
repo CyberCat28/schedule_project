@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Преподаватели{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Преподаватели</h1>
+    
+    <!-- форма добавления/редактирования -->
+    <div class="form-section">
+        <h2 id="formTitle">Добавить преподавателя</h2>
+        <form id="teacherForm">
+            <input type="hidden" id="teacherId">
+            <div class="form-group">
+                <label>ФИО:</label>
+                <input type="text" id="teacherName" required placeholder="Иванов Сергей Владимирович">
+            </div>
+            <div class="form-group">
+                <label>Краткое обозначение:</label>
+                <input type="text" id="teacherShortName" required placeholder="ИВ" maxlength="20">
+            </div>
+            <div class="form-group">
+                <label>Цвет:</label>
+                <input type="color" id="teacherColor" value="#3498db">
+            </div>
+            <div class="form-group">
+                <label>Дисциплины:</label>
+                <div id="subjectsList" class="checkbox-list"></div>
+            </div>
+            <button type="submit" class="btn">Сохранить</button>
+            <button type="button" id="cancelBtn" class="btn btn-secondary">Отмена</button>
+        </form>
+    </div>
+    
+    <!-- список преподавателей -->
+    <div class="list-section">
+        <h2>Список преподавателей</h2>
+        <div id="teachersList" class="cards-container"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/teachers.js') }}"></script>
+{% endblock %}
