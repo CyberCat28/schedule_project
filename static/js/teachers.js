@@ -1,9 +1,15 @@
 let editingTeacherId = null;
 let allSubjects = [];
+let allTeachers = [];
 
-document.addEventListener('DOMContentLoaded', function() {
-    loadTeachers();
-    loadSubjects();
+document.addEventListener('DOMContentLoaded', async function() {
+    await Promise.all([
+        loadTeachers(),
+        loadSubjects()
+    ]);
+
+    displayTeachers(await apiRequest('/api/teachers/'));
+    displaySubjectsCheckboxes();
     
     // обработка формы
     const form = document.getElementById('teacherForm');
@@ -17,11 +23,10 @@ document.addEventListener('DOMContentLoaded', function() {
         cancelBtn.addEventListener('click', cancelEditing);
     }
 
-    // 
     document.addEventListener('click', function(e) {
         // кликнули ли по кнопке "Редактировать"
         if (e.target.classList.contains('edit-btn')) {
-            const id = e.target.dataset.id;  // получение data-id
+            const id = e.target.dataset.id;
             editTeacher(id);
         }
         // кликнули ли по кнопке "Удалить"
@@ -34,12 +39,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function loadTeachers() {
     try {
-        // запрос к API
-        const teachers = await apiRequest('/api/teachers/');
-        displayTeachers(teachers);
+        allTeachers = await apiRequest('/api/teachers/');
+        displayTeachers(allTeachers);
+        return allTeachers;
     } catch (error) {
         console.error('Ошибка загрузки преподавателей:', error);
         alert('Не удалось загрузить преподавателей.');
+        return [];
     }
 }
 
@@ -47,9 +53,10 @@ async function loadSubjects() {
     try {
         allSubjects = await apiRequest('/api/subjects/');
         displaySubjectsCheckboxes();
-        updateTeacherSelect();
+        return allSubjects;
     } catch (error) {
         console.error('Ошибка загрузки дисциплин:', error);
+        return [];
     }
 }
 
@@ -61,18 +68,34 @@ function displayTeachers(teachers) {
         container.innerHTML = '<p>Преподаватели не найдены.</p>';
         return;
     }
+
+    // map для быстрого поиска дисциплин
+    const subjectMap = {};
+    allSubjects.forEach(s => subjectMap[s.id] = s);
     
-    container.innerHTML = teachers.map(teacher => `
-        <div class="card" data-id="${teacher.id}" style="border-left: 5px solid ${teacher.color}">
-            <h3>${teacher.name}</h3>
-            <p><strong>Краткое обозначение:</strong> ${teacher.short_name}</p>
-            <div class="color-indicator" style="background-color: ${teacher.color}"></div>
-            <div class="card-actions">
-                <button class="btn btn-small edit-btn" data-id="${teacher.id}">Редактировать</button>
-                <button class="btn btn-small btn-danger delete-btn" data-id="${teacher.id}">Удалить</button>
+    container.innerHTML = teachers.map(teacher => {
+        // получение список дисциплин преподавателя
+        const teacherSubjects = (teacher.subject_ids || []).map(id => subjectMap[id]).filter(s => s !== undefined);
+        const subjectsHtml = teacherSubjects.length > 0 ? teacherSubjects.map(s => `<span class="subject-tag">${s.short_name}</span>`).join(''): 
+        '<span class="no-subjects">Нет дисциплин</span>';
+        const contactHtml = teacher.contact ? `<p class="contact-info">Контакты: ${teacher.contact}</p>` : '';
+    return `
+            <div class="card teacher-card" data-id="${teacher.id}" style="border-left: 5px solid ${teacher.color}">
+                <h3>${teacher.name}</h3>
+                <p><strong>Краткое обозначение:</strong> ${teacher.short_name}</p>
+                ${contactHtml}
+                <div class="color-indicator" style="background-color: ${teacher.color}"></div>
+                <div class="teacher-subjects">
+                    <strong>Дисциплины:</strong>
+                    <div class="subjects-list">${subjectsHtml}</div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn btn-small edit-btn" data-id="${teacher.id}">Редактировать</button>
+                    <button class="btn btn-small btn-danger delete-btn" data-id="${teacher.id}">Удалить</button>
+                </div>
             </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 function displaySubjectsCheckboxes() {
@@ -92,18 +115,6 @@ function displaySubjectsCheckboxes() {
     `).join('');
 }
 
-function updateTeacherSelect() {
-    const select = document.getElementById('subjectTeacher');
-    if (!select) return;
-    
-    const currentValue = select.value;
-    select.innerHTML = '<option value="">Не выбран</option>' +
-        allSubjects.map(subject => `
-            <option value="${subject.id}">${subject.name}</option>
-        `).join('');
-    select.value = currentValue;
-}
-
 async function handleFormSubmit(e) {
     // остановление обновление страницы
     e.preventDefault();
@@ -117,6 +128,7 @@ async function handleFormSubmit(e) {
     const teacherData = {
         name: document.getElementById('teacherName').value,
         short_name: document.getElementById('teacherShortName').value,
+        contact: document.getElementById('teacherContact').value,
         color: document.getElementById('teacherColor').value,
         subject_ids: selectedSubjects
     };
@@ -131,11 +143,11 @@ async function handleFormSubmit(e) {
         }
         // сброс формы
         resetForm();
-        // обновление формы
-        loadTeachers();
+        await loadTeachers();
+        await loadSubjects();
     } catch (error) {
         console.error('Ошибка сохранения:', error);
-        alert('Не удалось сохранить преподавателя');
+        alert('Не удалось сохранить преподавателя.');
     }
 }
 
@@ -147,6 +159,7 @@ async function editTeacher(id) {
         // заполнение форм
         document.getElementById('teacherName').value = teacher.name;
         document.getElementById('teacherShortName').value = teacher.short_name;
+        document.getElementById('teacherContact').value = teacher.contact || '';
         document.getElementById('teacherColor').value = teacher.color;
         
         // отметка выбранных дисциплин
@@ -170,7 +183,8 @@ async function deleteTeacher(id) {
     
     try {
         await apiRequest(`/api/teachers/${id}`, 'DELETE');
-        loadTeachers();
+        await loadTeachers();
+        await loadSubjects();
     } catch (error) {
         console.error('Ошибка удаления:', error);
         alert('Не удалось удалить преподавателя.');

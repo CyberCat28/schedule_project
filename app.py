@@ -1,11 +1,11 @@
+import firebase_admin
 from flask import Flask, render_template
 from config import Config
-import firebase_admin
 from firebase_admin import credentials, firestore
 from routes.groups import groups_bp
 from routes.teachers import teachers_bp
 from routes.subjects import subjects_bp
-from routes.classrooms import classrooms_bp
+from routes.lessons import lessons_bp
 
 def create_app():
     app = Flask(__name__)
@@ -20,12 +20,12 @@ def create_app():
     app.register_blueprint(groups_bp, url_prefix='/api/groups')
     app.register_blueprint(teachers_bp, url_prefix='/api/teachers')
     app.register_blueprint(subjects_bp, url_prefix='/api/subjects')
-    app.register_blueprint(classrooms_bp, url_prefix='/api/classrooms')
+    app.register_blueprint(lessons_bp, url_prefix='/api/lessons')
     
     # страницы
     @app.route('/')
     def index():
-        return render_template('index.html')
+        return render_template('schedule.html')
     
     @app.route('/groups')
     def groups_page():
@@ -38,6 +38,10 @@ def create_app():
     @app.route('/subjects')
     def subjects_page():
         return render_template('subjects.html')
+    
+    @app.route('/schedule')
+    def schedule_page():
+        return render_template('schedule.html')
     
     return app
 

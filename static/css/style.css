@@ -1,3 +1,4 @@
+/* Базовые стили */
 * {
     margin: 0;
     padding: 0;
@@ -124,15 +125,6 @@ h1 {
     font-size: 16px;
 }
 
-.form-group input[type="color"] {
-    height: 50px;
-    padding: 5px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    cursor: pointer;
-    background: white;
-}
-
 .checkbox-list {
     display: flex;
     flex-direction: column;
@@ -237,14 +229,473 @@ h1 {
     margin-bottom: 15px;
 }
 
+/* Контейнер расписания */
+.schedule-container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    align-items: flex-start;
+    height: calc(100vh - 80px);
+}
+
+.schedule-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.schedule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+}
+
+.schedule-header h1 {
+    margin: 0;
+    color: #2c3e50;
+}
+
+/* Таблица с прокруткой */
+.schedule-table-wrapper {
+    overflow: auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    flex: 1;
+    position: relative;
+}
+
+.schedule-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 100%;
+    table-layout: auto;
+}
+
+.schedule-table th,
+.schedule-table td {
+    border: 1px solid #e0e0e0;
+    padding: 8px;
+    text-align: center;
+    vertical-align: top;
+    background: white;
+}
+
+/* Фиксированный заголовок с группами */
+.schedule-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: white;
+}
+
+.time-header {
+    background: #34495e !important;
+    color: white;
+    font-weight: bold;
+    min-width: 120px;
+    width: 120px;
+    z-index: 11 !important;
+    left: 0;
+}
+
+.group-header {
+    background: #3498db !important;
+    color: white;
+    min-width: 180px;
+}
+
+.group-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.group-info {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+/* Фиксированный первый столбец (дни и пары) */
+.schedule-table td:first-child,
+.schedule-table th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    background: white;
+}
+
+.day-header-row td:first-child {
+    z-index: 6;
+}
+
+.day-header-row {
+    background: #ecf0f1;
+}
+
+.day-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #2c3e50;
+    text-align: left;
+    padding: 10px 15px;
+    background: #ecf0f1 !important;
+}
+
+.pair-number {
+    background: #f8f9fa !important;
+    font-weight: bold;
+    color: #7f8c8d;
+    min-width: 100px;
+    width: 100px;
+}
+
+.lesson-cell {
+    min-height: 140px;
+    padding: 5px;
+    background: #fafafa;
+    vertical-align: top;
+}
+
+/* Угловая ячейка (пересечение заголовка и первого столбца) */
+.schedule-table thead th:first-child {
+    z-index: 12 !important;
+    background: #34495e !important;
+}
+
+/* Карточка занятия */
+.lesson-card {
+    background: white;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-align: left;
+    font-size: 13px;
+}
+
+.lesson-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.teacher-short {
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.lesson-type {
+    background: #e8f4f8;
+    color: #2c3e50;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.week-indicator {
+    background: #fff3cd;
+    color: #856404;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.card-subject {
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 4px;
+    font-size: 13px;
+}
+
+.card-teacher {
+    font-size: 12px;
+    color: #7f8c8d;
+    margin-bottom: 6px;
+}
+
+.card-weeks {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 4px;
+    font-size: 11px;
+}
+
+.week-info {
+    display: flex;
+    gap: 4px;
+}
+
+.week-label {
+    color: #95a5a6;
+}
+
+.week-value {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.card-classroom {
+    font-size: 11px;
+    color: #3498db;
+    font-weight: bold;
+}
+
+/* Панель преподавателей */
+.teachers-panel {
+    width: 320px;
+    min-width: 320px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    height: calc(100vh - 120px);
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+.teachers-panel h2 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+    font-size: 20px;
+}
+
+.panel-teacher {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 15px;
+    background: #fafafa;
+}
+
+.panel-teacher-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.teacher-color-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.teacher-name {
+    font-weight: bold;
+    color: #2c3e50;
+    font-size: 14px;
+}
+
+.panel-subjects {
+    margin-bottom: 10px;
+}
+
+.panel-subject {
+    padding: 6px 10px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.2s;
+}
+
+.panel-subject:hover {
+    background: #e8f4f8;
+    border-color: #3498db;
+}
+
+.panel-lessons-section {
+    margin-bottom: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #ddd;
+}
+
+.panel-lessons-section strong {
+    font-size: 13px;
+    color: #7f8c8d;
+}
+
+.panel-lessons-list {
+    margin-top: 5px;
+}
+
+.panel-lesson {
+    background: white;
+    border-radius: 5px;
+    padding: 6px 8px;
+    margin-bottom: 5px;
+    border: 1px solid #e0e0e0;
+    transition: background 0.2s;
+}
+
+.panel-lesson:hover {
+    background: #f0f7ff;
+}
+
+.panel-lesson-subj {
+    font-weight: bold;
+    font-size: 13px;
+    color: #2c3e50;
+}
+
+.panel-lesson-info {
+    font-size: 11px;
+    color: #7f8c8d;
+    margin-top: 2px;
+}
+
+.no-subjects, .no-lessons {
+    color: #95a5a6;
+    font-style: italic;
+    font-size: 12px;
+    padding: 5px 0;
+}
+
+.btn-add-lesson {
+    width: 100%;
+    margin-top: 8px;
+}
+
+/* Модальные окна */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 10px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #2c3e50;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: #95a5a6;
+}
+
+.modal-close:hover {
+    color: #2c3e50;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.form-actions .btn {
+    flex: 1;
+}
+
+/* Конфликты */
+.conflict-modal {
+    max-width: 500px;
+}
+
+.conflict-list {
+    margin: 20px 0;
+}
+
+.conflict-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.conflict-icon {
+    font-size: 20px;
+}
+
+.conflict-text {
+    color: #856404;
+    font-size: 14px;
+}
+
 /* Адаптивность */
-@media (max-width: 768px) {
-    .sidebar {
-        width: 100%;
-        left: -100%;
+@media (max-width: 1200px) {
+    .schedule-container {
+        flex-direction: column;
+        height: auto;
     }
     
-    .cards-container {
-        grid-template-columns: 1fr;
+    .schedule-main {
+        height: auto;
+    }
+    
+    .schedule-table-wrapper {
+        height: 600px;
+    }
+    
+    .teachers-panel {
+        width: 100%;
+        min-width: 100%;
+        height: 400px;
     }
 }

@@ -20,10 +20,8 @@
                 <input type="text" id="subjectShortName" required placeholder="ИНФ" maxlength="10">
             </div>
             <div class="form-group">
-                <label>Преподаватель:</label>
-                <select id="subjectTeacher">
-                    <option value="">Не выбран</option>
-                </select>
+                <label>Преподаватели (можно выбрать несколько):</label>
+                <div id="teachersList" class="checkbox-list"></div>
             </div>
             <button type="submit" class="btn">Сохранить</button>
             <button type="button" id="cancelBtn" class="btn btn-secondary">Отмена</button>

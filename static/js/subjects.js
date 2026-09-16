@@ -1,10 +1,13 @@
 let editingSubjectId = null;
 let allTeachers = [];
+let allSubjects = [];
 
-document.addEventListener('DOMContentLoaded', function() {
-    loadSubjects();
-    loadTeachers();
-    
+document.addEventListener('DOMContentLoaded', async function() {
+    await Promise.all([
+        loadSubjects(),
+        loadTeachers()
+    ]);
+
     // обработка формы
     const form = document.getElementById('subjectForm');
     if (form) {
@@ -34,21 +37,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function loadSubjects() {
     try {
-        // запрос к API
-        const subjects = await apiRequest('/api/subjects/');
-        displaySubjects(subjects);
+        allSubjects = await apiRequest('/api/subjects/');
+        displaySubjects(allSubjects);
+        return allSubjects;
     } catch (error) {
         console.error('Ошибка загрузки дисциплин:', error);
         alert('Не удалось загрузить дисциплины.');
+        return [];
     }
 }
 
 async function loadTeachers() {
     try {
         allTeachers = await apiRequest('/api/teachers/');
-        updateTeacherSelect();
+        displayTeachersCheckboxes();
+        return allTeachers;
     } catch (error) {
         console.error('Ошибка загрузки преподавателей:', error);
+        return [];
     }
 }
 
@@ -63,18 +69,24 @@ function displaySubjects(subjects) {
     
     // создание map для быстрого поиска преподавателя
     const teacherMap = {};
-    allTeachers.forEach(t => teacherMap[t.id] = t.name);
+    allTeachers.forEach(t => teacherMap[t.id] = t);
     
     container.innerHTML = subjects.map(subject => {
-        const teacherName = subject.teacher_id ? 
-            (teacherMap[subject.teacher_id] || 'Неизвестный преподаватель') : 
-            'Не назначен';
+        // получение списока преподавателей дисциплины
+        const subjectTeachers = (subject.teacher_ids || []).map(id => teacherMap[id]).filter(t => t !== undefined);
+        
+        const teachersHtml = subjectTeachers.length > 0 ? 
+        subjectTeachers.map(t => `<span class="teacher-tag" style="background-color: ${t.color}20; border-color: ${t.color}">${t.short_name}</span>`).join('') : 
+        '<span class="no-teachers">Нет преподавателей</span>';
         
         return `
-            <div class="card" data-id="${subject.id}">
+            <div class="card subject-card" data-id="${subject.id}">
                 <h3>${subject.name}</h3>
                 <p><strong>Код:</strong> ${subject.short_name}</p>
-                <p><strong>Преподаватель:</strong> ${teacherName}</p>
+                <div class="subject-teachers">
+                    <strong>Преподаватели:</strong>
+                    <div class="teachers-list">${teachersHtml}</div>
+                </div>
                 <div class="card-actions">
                     <button class="btn btn-small edit-btn" data-id="${subject.id}">Редактировать</button>
                     <button class="btn btn-small btn-danger delete-btn" data-id="${subject.id}">Удалить</button>
@@ -84,29 +96,39 @@ function displaySubjects(subjects) {
     }).join('');
 }
 
-function updateTeacherSelect() {
-    const select = document.getElementById('subjectTeacher');
-    if (!select) return;
+function displayTeachersCheckboxes() {
+    const container = document.getElementById('teachersList');
+    if (!container) return;
     
-    const currentValue = select.value;
-    select.innerHTML = '<option value="">Не выбран</option>' +
-        allTeachers.map(teacher => `
-            <option value="${teacher.id}">${teacher.name}</option>
-        `).join('');
-    select.value = currentValue;
+    if (allTeachers.length === 0) {
+        container.innerHTML = '<p>Преподаватели не найдены. Сначала добавьте преподавателей.</p>';
+        return;
+    }
+    
+    container.innerHTML = allTeachers.map(teacher => `
+        <label class="checkbox-label">
+            <input type="checkbox" name="teacher" value="${teacher.id}">
+            <span class="teacher-color-indicator" style="background-color: ${teacher.color}"></span>
+            ${teacher.name} (${teacher.short_name})
+        </label>
+    `).join('');
 }
 
 async function handleFormSubmit(e) {
     // остановление обновление страницы
     e.preventDefault();
     
-    const teacherId = document.getElementById('subjectTeacher').value;
+    // собираем выбранных преподавателей
+    const selectedTeachers = [];
+    document.querySelectorAll('input[name="teacher"]:checked').forEach(checkbox => {
+        selectedTeachers.push(checkbox.value);
+    });
     
     // собирание выбранных дисциплин
     const subjectData = {
         name: document.getElementById('subjectName').value,
         short_name: document.getElementById('subjectShortName').value,
-        teacher_id: teacherId || null
+        teacher_ids: selectedTeachers
     };
     
     try {
@@ -119,8 +141,8 @@ async function handleFormSubmit(e) {
         }
         // сброс формы
         resetForm();
-        // обновление формы
-        loadSubjects();
+        await loadSubjects();
+        await loadTeachers();
     } catch (error) {
         console.error('Ошибка сохранения:', error);
         alert('Не удалось сохранить дисциплину.');
@@ -135,8 +157,12 @@ async function editSubject(id) {
         // заполнение форм
         document.getElementById('subjectName').value = subject.name;
         document.getElementById('subjectShortName').value = subject.short_name;
-        document.getElementById('subjectTeacher').value = subject.teacher_id || '';
         
+        // отметка выбранных преподавателей
+        document.querySelectorAll('input[name="teacher"]').forEach(checkbox => {
+            checkbox.checked = subject.teacher_ids && subject.teacher_ids.includes(checkbox.value);
+        });
+
         // сохранение id для обновления
         editingSubjectId = id;
         document.getElementById('formTitle').textContent = 'Редактировать дисциплину';
@@ -147,13 +173,13 @@ async function editSubject(id) {
         alert('Не удалось загрузить дисциплину.');
     }
 }
-
 async function deleteSubject(id) {
     if (!confirm('Вы уверены, что хотите удалить дисциплину?')) return;
     
     try {
         await apiRequest(`/api/subjects/${id}`, 'DELETE');
-        loadSubjects();
+        await loadSubjects();
+        await loadTeachers();
     } catch (error) {
         console.error('Ошибка удаления:', error);
         alert('Не удалось удалить дисциплину.');
@@ -168,4 +194,5 @@ function resetForm() {
     editingSubjectId = null;
     document.getElementById('subjectForm').reset();
     document.getElementById('formTitle').textContent = 'Добавить дисциплину';
+    document.querySelectorAll('input[name="teacher"]').forEach(cb => cb.checked = false);
 }
