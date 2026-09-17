@@ -3,12 +3,13 @@
 {% block title %}Расписание{% endblock %}
 
 {% block content %}
+<div id="notification-container" class="notification-container"></div>
+
 <div class="schedule-container">
     <!-- основная таблица расписания -->
     <div class="schedule-main">
         <div class="schedule-header">
             <h1>Расписание занятий</h1>
-            <button class="btn btn-primary" id="addLessonBtn">+ Добавить занятие</button>
         </div>
         
         <div class="schedule-table-wrapper">
@@ -108,6 +109,7 @@
                     <option value="Лекция">Лекция</option>
                     <option value="Практика">Практика</option>
                     <option value="Лабораторная">Лабораторная</option>
+                    <option value="Зкзамен">Зкзамен</option>
                 </select>
             </div>
             
@@ -119,22 +121,11 @@
         </form>
     </div>
 </div>
-
-<!-- модальное окно конфликтов -->
-<div class="modal" id="conflictModal">
-    <div class="modal-content conflict-modal">
-        <div class="modal-header">
-            <h2>Конфликт расписания</h2>
-            <button class="modal-close" id="closeConflictModal">&times;</button>
-        </div>
-        <div id="conflictList" class="conflict-list"></div>
-        <div class="form-actions">
-            <button class="btn btn-secondary" id="closeConflictBtn">Закрыть</button>
-        </div>
-    </div>
-</div>
 {% endblock %}
 
 {% block scripts %}
+<script src="{{ url_for('static', filename='js/notifications.js') }}"></script>
+<script src="{{ url_for('static', filename='js/conflicts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/drag-drop.js') }}"></script>
 <script src="{{ url_for('static', filename='js/schedule.js') }}"></script>
 {% endblock %}

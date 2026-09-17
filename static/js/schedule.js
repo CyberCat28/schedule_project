@@ -5,11 +5,6 @@ let allGroups = [];
 let editingLessonId = null;
 
 const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
-const lessonTypes = {
-    'Лекция': 'Лек',
-    'Практика': 'Пр',
-    'Лабораторная': 'Лаб'
-};
 
 document.addEventListener('DOMContentLoaded', async function() {
     // загрузка всех данных
@@ -25,17 +20,15 @@ document.addEventListener('DOMContentLoaded', async function() {
     renderSchedule();
     renderTeachersPanel();
     populateGroupSelect();
+
+    initDragAndDrop();
     
     // обработчики модального окна
-    document.getElementById('addLessonBtn').addEventListener('click', () => openModal());
     document.getElementById('closeModal').addEventListener('click', closeModalHandler);
     document.getElementById('cancelBtn').addEventListener('click', closeModalHandler);
     document.getElementById('deleteBtn').addEventListener('click', deleteLesson);
     
-    // обработка формы
     document.getElementById('lessonForm').addEventListener('submit', handleFormSubmit);
-    
-    // зависимость дисциплин от преподавателя
     document.getElementById('lessonTeacher').addEventListener('change', updateSubjectsSelect);
 });
 
@@ -82,30 +75,20 @@ function buildScheduleTable() {
     
     let html = '<thead><tr><th class="time-header">Группа / Пара</th>';
     allGroups.forEach(group => {
-        html += `<th class="group-header">
-            <div class="group-name">${group.name}</div>
-            <div class="group-info">${group.speciality}, ${group.course} курс</div>
-        </th>`;
+        html += ` <th class="group-header"><div class="group-name">${group.name}</div></th> `;
     });
     html += '</tr></thead><tbody>';
     
     days.forEach((day, dayIndex) => {
-        // строка с названием дня
-        html += `<tr class="day-header-row">
-            <td colspan="${allGroups.length + 1}" class="day-name">${day}</td>
-        </tr>`;
-        
-        // строки с парами
+        html += ` <tr class="day-header-row"> <td colspan="${allGroups.length + 1}" class="day-name">${day}</td> </tr> `;
         for (let pair = 1; pair <= 6; pair++) {
-            html += `<tr class="lesson-row">
-                <td class="pair-number">${pair} пара</td>`;
+            html += ` <tr class="lesson-row"> <td class="pair-number">${pair} пара</td> `;
             allGroups.forEach(group => {
-                html += `<td class="lesson-cell" data-group="${group.id}" data-day="${dayIndex}" data-pair="${pair}"></td>`;
+                html += ` <td class="lesson-cell" data-group="${group.id}" data-day="${dayIndex}" data-pair="${pair}"> </td>`;
             });
             html += '</tr>';
         }
     });
-    
     html += '</tbody>';
     table.innerHTML = html;
 }
@@ -113,8 +96,7 @@ function buildScheduleTable() {
 // заполнение групп в форме
 function populateGroupSelect() {
     const select = document.getElementById('lessonGroup');
-    select.innerHTML = '<option value="">Выберите группу</option>' +
-        allGroups.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
+    select.innerHTML = '<option value="">Выберите группу</option>' + allGroups.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
 }
 
 // отображенеие занятия в таблице
@@ -164,34 +146,23 @@ function createLessonCard(lesson, teacher, subject, week) {
     card.className = 'lesson-card';
     card.style.borderLeft = `5px solid ${teacher.color}`;
     card.dataset.lessonId = lesson.id;
+    card.dataset.week = week;
     
-    const week1Text = lesson.week1_lesson > 0 ? `${lesson.week1_lesson} пара` : '—';
-    const week2Text = lesson.week2_lesson > 0 ? `${lesson.week2_lesson} пара` : '—';
-    const typeShort = lessonTypes[lesson.lesson_type] || lesson.lesson_type;
-
+    const typeText = lesson.lesson_type;
     const weekLabel = week === 1 ? '1-я нед.' : '2-я нед.';
     
     card.innerHTML = `
         <div class="card-header">
             <span class="teacher-short" style="background-color: ${teacher.color}; color: white; padding: 2px 6px; border-radius: 3px; font-weight: bold; font-size: 12px;">${teacher.short_name}</span>
-            <span class="lesson-type">${typeShort}</span>
+            <span class="lesson-type">${typeText}</span>
             <span class="week-indicator">${weekLabel}</span>
         </div>
         <div class="card-subject" style="font-weight: bold; color: #2c3e50; margin-bottom: 4px; font-size: 13px;">${subject.short_name}</div>
-        <div class="card-teacher" style="font-size: 12px; color: #7f8c8d; margin-bottom: 6px;">${teacher.name}</div>
-        <div class="card-weeks" style="display: flex; gap: 10px; margin-bottom: 4px; font-size: 11px; background: #f8f9fa; padding: 4px; border-radius: 4px;">
-            <div class="week-info">
-                <span class="week-label">1н:</span>
-                <span class="week-value" style="font-weight: bold; color: ${lesson.week1_lesson > 0 ? '#2c3e50' : '#95a5a6'}">${week1Text}</span>
-            </div>
-            <div class="week-info">
-                <span class="week-label">2н:</span>
-                <span class="week-value" style="font-weight: bold; color: ${lesson.week2_lesson > 0 ? '#2c3e50' : '#95a5a6'}">${week2Text}</span>
-            </div>
-        </div>
+        <div class="card-teacher" style="font-size: 12px; color: #7f8c8d; margin-bottom: 6px;">${teacher.short_name}</div>
         ${lesson.classroom_id ? `<div class="card-classroom" style="font-size: 11px; color: #3498db; font-weight: bold;">Каб. ${lesson.classroom_id}</div>` : ''}
     `;
     
+    // обработчики событий
     card.addEventListener('click', () => openModal(lesson));
     
     return card;
@@ -215,9 +186,7 @@ function renderTeachersPanel() {
     
     container.innerHTML = allTeachers.map(teacher => {
         // дисциплины преподавателя
-        const teacherSubjects = (teacher.subject_ids || [])
-            .map(id => subjectMap[id])
-            .filter(s => s !== undefined);
+        const teacherSubjects = (teacher.subject_ids || []).map(id => subjectMap[id]).filter(s => s !== undefined);
         
         const subjectsHtml = teacherSubjects.length > 0
             ? teacherSubjects.map(s => `
@@ -252,7 +221,7 @@ function renderTeachersPanel() {
             <div class="panel-teacher" data-teacher-id="${teacher.id}">
                 <div class="panel-teacher-header">
                     <span class="teacher-color-dot" style="background-color: ${teacher.color}"></span>
-                    <span class="teacher-name">${teacher.name}</span>
+                    <span class="teacher-name">${teacher.short_name}</span>
                 </div>
                 <div class="panel-subjects">
                     ${subjectsHtml}
@@ -267,6 +236,8 @@ function renderTeachersPanel() {
             </div>
         `;
     }).join('');
+
+    initDragAndDrop();
     
     // обработчики
     document.querySelectorAll('.btn-add-lesson').forEach(btn => {
@@ -290,15 +261,13 @@ function renderTeachersPanel() {
     });
 }
 
-function openModal(lesson = null, preselectedTeacher = null, preselectedSubject = null) {
+function openModal(lesson = null, preselectedTeacher = null, preselectedSubject = null, preselectedGroup = null, preselectedDay = null, preselectedPair = null) {
     const modal = document.getElementById('lessonModal');
     const modalTitle = document.getElementById('modalTitle');
     const deleteBtn = document.getElementById('deleteBtn');
-    
-    // заполнение список преподавателей
     const teacherSelect = document.getElementById('lessonTeacher');
-    teacherSelect.innerHTML = '<option value="">Выберите преподавателя</option>' +
-        allTeachers.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+    
+    teacherSelect.innerHTML = '<option value="">Выберите преподавателя</option>' + allTeachers.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
     
     if (lesson) {
         modalTitle.textContent = 'Редактировать занятие';
@@ -336,6 +305,17 @@ function openModal(lesson = null, preselectedTeacher = null, preselectedSubject 
                 }
             });
         }
+        // заполнение данных из drag & drop
+        if (preselectedGroup) {
+            document.getElementById('lessonGroup').value = preselectedGroup;
+        } 
+        if (preselectedDay !== null) {
+            document.getElementById('lessonDay').value = String(preselectedDay);
+        }
+        if (preselectedPair) {
+            // по умолчанию перенесённая пара ставится на 1-ю неделю
+            document.getElementById('lessonWeek1').value = String(preselectedPair);
+        }
     }
     
     modal.classList.add('active');
@@ -355,39 +335,42 @@ async function updateSubjectsSelect() {
         return;
     }
     
-    const teacher = allTeachers.find(t => t.id === teacherId);
+    const teacher = allTeachers.find(t => t.id == teacherId);
     if (!teacher) {
         subjectSelect.innerHTML = '<option value="">Преподаватель не найден</option>';
         return;
     }
     
-    const teacherSubjects = (teacher.subject_ids || [])
-        .map(id => allSubjects.find(s => s.id === id))
-        .filter(s => s !== undefined);
+    const teacherSubjects = (teacher.subject_ids || []).map(id => allSubjects.find(s => s.id == id)).filter(s => s !== undefined);
     
-    subjectSelect.innerHTML = '<option value="">Выберите дисциплину</option>' +
-        teacherSubjects.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+    subjectSelect.innerHTML = '<option value="">Выберите дисциплину</option>' + teacherSubjects.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
 }
 
 async function handleFormSubmit(e) {
     e.preventDefault();
     
     const lessonData = {
-        group_id: document.getElementById('lessonGroup').value,
-        day: parseInt(document.getElementById('lessonDay').value),
-        teacher_id: document.getElementById('lessonTeacher').value,
-        subject_id: document.getElementById('lessonSubject').value,
-        week1_lesson: parseInt(document.getElementById('lessonWeek1').value),
-        week2_lesson: parseInt(document.getElementById('lessonWeek2').value),
-        classroom_id: document.getElementById('lessonClassroom').value,
-        lesson_type: document.getElementById('lessonType').value
+        group_id: document.getElementById('lessonGroup').value, day: parseInt(document.getElementById('lessonDay').value), 
+        teacher_id: document.getElementById('lessonTeacher').value, subject_id: document.getElementById('lessonSubject').value,
+        week1_lesson: parseInt(document.getElementById('lessonWeek1').value), week2_lesson: parseInt(document.getElementById('lessonWeek2').value),
+        classroom_id: document.getElementById('lessonClassroom').value, lesson_type: document.getElementById('lessonType').value
     };
+
+    // проверка конфликтов
+    const conflicts = validateLessonConflicts(lessonData, editingLessonId);
+    if (conflicts.length > 0) {
+        // показ каждого предупреждения отдельно или списком
+        conflicts.forEach(conflict => showNotification(conflict, 'warning'));
+        return;
+    }
     
     try {
         if (editingLessonId) {
             await apiRequest(`/api/lessons/${editingLessonId}`, 'PUT', lessonData);
+            showNotification('Занятие успешно обновлено.', 'success');
         } else {
             await apiRequest('/api/lessons/', 'POST', lessonData);
+            showNotification('Занятие успешно добавлено', 'success');
         }
         
         closeModalHandler();
@@ -396,19 +379,9 @@ async function handleFormSubmit(e) {
         renderTeachersPanel();
     } catch (error) {
         console.error('Ошибка сохранения:', error);
-        if (error.message && error.message.includes('Конфликт')) {
-            try {
-                const errorData = JSON.parse(error.message);
-                if (errorData.conflicts) {
-                    showConflicts(errorData.conflicts);
-                    return;
-                }
-            } catch (e) {}
-        }
-        alert('Не удалось сохранить занятие: ' + error.message);
+        showNotification('Не удалось сохранить занятие: ' + error.message, 'error');
     }
 }
-
 
 async function deleteLesson() {
     if (!editingLessonId) return;
@@ -416,12 +389,13 @@ async function deleteLesson() {
     
     try {
         await apiRequest(`/api/lessons/${editingLessonId}`, 'DELETE');
+        showNotification('Занятие удалено', 'success');
         closeModalHandler();
         await loadLessons();
         renderSchedule();
         renderTeachersPanel();
     } catch (error) {
         console.error('Ошибка удаления:', error);
-        alert('Не удалось удалить занятие.');
+        showNotification('Не удалось удалить занятие', 'error');
     }
 }
