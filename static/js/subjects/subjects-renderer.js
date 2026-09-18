@@ -14,7 +14,9 @@ function displaySubjects(subjects) {
     
     container.innerHTML = subjects.map(subject => {
         // получение списка преподавателей дисциплины
-        const subjectTeachers = (subject.teacher_ids || []).map(id => teacherMap[id]).filter(t => t !== undefined);
+        const subjectTeachers = (subject.teacher_ids || [])
+            .map(id => teacherMap[id])
+            .filter(t => t !== undefined);
         
         const teachersHtml = subjectTeachers.length > 0 ? 
             subjectTeachers.map(t => `<span class="teacher-tag" style="background-color: ${t.color}20; border-color: ${t.color}">${t.short_name}</span>`).join('') : 

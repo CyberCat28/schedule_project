@@ -14,17 +14,24 @@ function displayTeachers(teachers) {
     
     container.innerHTML = teachers.map(teacher => {
         // получение список дисциплин преподавателя
-        const teacherSubjects = (teacher.subject_ids || []).map(id => subjectMap[id]).filter(s => s !== undefined);
+        const teacherSubjects = (teacher.subject_ids || [])
+            .map(id => subjectMap[id])
+            .filter(s => s !== undefined);
         
-        const subjectsHtml = teacherSubjects.length > 0 ? teacherSubjects.map(s => `<span class="subject-tag">${s.short_name}</span>`).join(''): '<span class="no-subjects">Нет дисциплин</span>';
+        const subjectsHtml = teacherSubjects.length > 0 
+            ? teacherSubjects.map(s => `<span class="subject-tag">${s.short_name}</span>`).join('')
+            : '<span class="no-subjects">Нет дисциплин</span>';
         
-        const contactHtml = teacher.contact ? `<p class="contact-info">Контакты: ${teacher.contact}</p>` : '';
+        const contactHtml = teacher.contact 
+            ? `<p class="contact-info">Контакты: ${teacher.contact}</p>` 
+            : '';
         
         return `
             <div class="card teacher-card" data-id="${teacher.id}" style="border-left: 5px solid ${teacher.color}">
                 <h3>${teacher.name}</h3>
-                <p> ${teacher.short_name}</p>
+                <p><strong>Краткое обозначение:</strong> ${teacher.short_name}</p>
                 ${contactHtml}
+                <div class="color-indicator" style="background-color: ${teacher.color}"></div>
                 <div class="teacher-subjects">
                     <strong>Дисциплины:</strong>
                     <div class="subjects-list">${subjectsHtml}</div>

@@ -47,7 +47,6 @@ def create_subject():
         subject_data = {
             'name': data['name'],
             'short_name': data['short_name'],
-            'color': data.get('color', '#95a5a6'),
             'teacher_ids': data.get('teacher_ids', [])
         }
         

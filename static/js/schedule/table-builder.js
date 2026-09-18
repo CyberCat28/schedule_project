@@ -11,18 +11,8 @@ function buildScheduleTable() {
     
     days.forEach((day, dayIndex) => {
         html += ` <tr class="day-header-row"> <td colspan="${allGroups.length + 1}" class="day-name">${day}</td> </tr> `;
-        
-        for (let pair = 1; pair <= 4; pair++) {
-            // нахождение времени для пары
-            const lessonTime = lessonTimes.find(t => t.pair === pair);
-            const timeText = lessonTime ? lessonTime.time : '';
-            
-            html += ` <tr class="lesson-row">
-                <td class="pair-number">
-                <div class="pair-label">${pair} пара</div>
-                <div class="pair-time">${timeText}</div>
-                </td> `;
-            
+        for (let pair = 1; pair <= 6; pair++) {
+            html += ` <tr class="lesson-row"> <td class="pair-number">${pair} пара</td> `;
             allGroups.forEach(group => {
                 html += ` <td class="lesson-cell" data-group="${group.id}" data-day="${dayIndex}" data-pair="${pair}"> </td>`;
             });
@@ -32,4 +22,11 @@ function buildScheduleTable() {
     
     html += '</tbody>';
     table.innerHTML = html;
+}
+
+// заполнение групп в форме
+function populateGroupSelect() {
+    const select = document.getElementById('lessonGroup');
+    select.innerHTML = '<option value="">Выберите группу</option>' + 
+        allGroups.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
 }

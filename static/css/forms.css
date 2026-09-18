@@ -76,25 +76,3 @@
     padding: 5px 10px;
     font-size: 14px;
 }
-
-/* Кнопки в заголовке */
-.header-buttons {
-    display: flex;
-    gap: 10px;
-}
-
-.btn-success {
-    background: #27ae60;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    transition: background 0.3s;
-}
-
-.btn-success:hover {
-    background: #229954;
-}

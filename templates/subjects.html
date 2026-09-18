@@ -20,10 +20,6 @@
                 <input type="text" id="subjectShortName" required placeholder="ИНФ" maxlength="10">
             </div>
             <div class="form-group">
-                <label>Цвет дисциплины:</label>
-                <input type="color" id="subjectColor" value="#3498db" class="color-picker-large">
-            </div>
-            <div class="form-group">
                 <label>Преподаватели (можно выбрать несколько):</label>
                 <div id="teachersList" class="checkbox-list"></div>
             </div>
@@ -41,8 +37,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/subjects/subjects-data.js') }}"></script>
-<script src="{{ url_for('static', filename='js/subjects/subjects-renderer.js') }}"></script>
-<script src="{{ url_for('static', filename='js/subjects/subjects-form.js') }}"></script>
-<script src="{{ url_for('static', filename='js/subjects/subjects.js') }}"></script>
+<script src="{{ url_for('static', filename='js/subjects.js') }}"></script>
 {% endblock %}

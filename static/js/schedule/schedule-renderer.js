@@ -63,6 +63,7 @@ function createLessonCard(lesson, teacher, subject, week) {
             <span class="week-indicator">${weekLabel}</span>
         </div>
         <div class="card-subject" style="font-weight: bold; color: #2c3e50; margin-bottom: 4px; font-size: 13px;">${subject.short_name}</div>
+        <div class="card-teacher" style="font-size: 12px; color: #7f8c8d; margin-bottom: 6px;">${teacher.short_name}</div>
         <div class="card-weeks" style="display: flex; gap: 10px; margin-bottom: 4px; font-size: 11px; background: #f8f9fa; padding: 4px; border-radius: 4px;">
             <div class="week-info"><span class="week-label">1н:</span><span class="week-value" style="font-weight: bold; color: ${lesson.week1_lesson > 0 ? '#2c3e50' : '#95a5a6'}">${week1Text}</span></div>
             <div class="week-info"><span class="week-label">2н:</span><span class="week-value" style="font-weight: bold; color: ${lesson.week2_lesson > 0 ? '#2c3e50' : '#95a5a6'}">${week2Text}</span></div>
