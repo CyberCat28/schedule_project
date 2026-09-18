@@ -34,7 +34,7 @@
 **Изменения за 18.09.2026:**
 
 1. Добавлен экспорт .xlsx
-   <img width="1919" height="955" alt="Снимок экрана 2026-09-18 224558" src="https://github.com/user-attachments/assets/e51954bd-840e-47e6-a100-e8607231b994" />
+   <img width="1919" height="955" alt="Снимок экрана 2026-09-18 224558" src="https://github.com/user-attachments/assets/84a8b778-0b0d-4beb-bc85-b5262e0e4871" />
    <img width="1919" height="1032" alt="Снимок экрана 2026-09-18 224616" src="https://github.com/user-attachments/assets/65cc7cc2-f6e3-48c1-a40a-37715802b4de" />
 
 3. Изменён дизайн карточек в таблице
