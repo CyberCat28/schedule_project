@@ -3,129 +3,30 @@
 {% block title %}Расписание{% endblock %}
 
 {% block content %}
+<!-- контейнер для уведомлений -->
 <div id="notification-container" class="notification-container"></div>
 
 <div class="schedule-container">
-    <!-- основная таблица расписания -->
-    <div class="schedule-main">
-        <div class="schedule-header">
-            <h1>Расписание занятий</h1>
-        </div>
-        
-        <div class="schedule-table-wrapper">
-            <table class="schedule-table" id="scheduleTable">
-            </table>
-        </div>
-    </div>
+    <!-- таблица расписания -->
+    {% include 'components/schedule_table.html' %}
     
     <!-- панель преподавателей -->
-    <div class="teachers-panel">
-        <h2>Преподаватели</h2>
-        <div id="teachersPanel" class="teachers-list">
-        </div>
-    </div>
+    {% include 'components/teachers_panel.html' %}
 </div>
 
-<!-- модальное окно добавления/редактирования занятия -->
-<div class="modal" id="lessonModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2 id="modalTitle">Добавить занятие</h2>
-            <button class="modal-close" id="closeModal">&times;</button>
-        </div>
-        <form id="lessonForm">
-            <input type="hidden" id="lessonId">
-            
-            <div class="form-group">
-                <label>Группа:</label>
-                <select id="lessonGroup" required>
-                    <option value="">Выберите группу</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>День недели:</label>
-                <select id="lessonDay" required>
-                    <option value="">Выберите день</option>
-                    <option value="0">Понедельник</option>
-                    <option value="1">Вторник</option>
-                    <option value="2">Среда</option>
-                    <option value="3">Четверг</option>
-                    <option value="4">Пятница</option>
-                    <option value="5">Суббота</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>Преподаватель:</label>
-                <select id="lessonTeacher" required>
-                    <option value="">Выберите преподавателя</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>Дисциплина:</label>
-                <select id="lessonSubject" required>
-                    <option value="">Сначала выберите преподавателя</option>
-                </select>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label>1-я неделя (пара):</label>
-                    <select id="lessonWeek1">
-                        <option value="0">—</option>
-                        <option value="1">1 пара</option>
-                        <option value="2">2 пара</option>
-                        <option value="3">3 пара</option>
-                        <option value="4">4 пара</option>
-                        <option value="5">5 пара</option>
-                        <option value="6">6 пара</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>2-я неделя (пара):</label>
-                    <select id="lessonWeek2">
-                        <option value="0">—</option>
-                        <option value="1">1 пара</option>
-                        <option value="2">2 пара</option>
-                        <option value="3">3 пара</option>
-                        <option value="4">4 пара</option>
-                        <option value="5">5 пара</option>
-                        <option value="6">6 пара</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label>Кабинет:</label>
-                <input type="text" id="lessonClassroom" placeholder="Например: 305">
-            </div>
-            
-            <div class="form-group">
-                <label>Тип занятия:</label>
-                <select id="lessonType">
-                    <option value="Лекция">Лекция</option>
-                    <option value="Практика">Практика</option>
-                    <option value="Лабораторная">Лабораторная</option>
-                    <option value="Зкзамен">Зкзамен</option>
-                </select>
-            </div>
-            
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Сохранить</button>
-                <button type="button" class="btn btn-secondary" id="cancelBtn">Отмена</button>
-                <button type="button" class="btn btn-danger" id="deleteBtn" style="display: none;">Удалить</button>
-            </div>
-        </form>
-    </div>
-</div>
+<!-- модальное окно занятия -->
+{% include 'components/lesson_modal.html' %}
 {% endblock %}
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/notifications.js') }}"></script>
 <script src="{{ url_for('static', filename='js/conflicts.js') }}"></script>
 <script src="{{ url_for('static', filename='js/drag-drop.js') }}"></script>
-<script src="{{ url_for('static', filename='js/schedule.js') }}"></script>
+<script src="{{ url_for('static', filename='js/schedule/schedule-data.js') }}"></script>
+<script src="{{ url_for('static', filename='js/schedule/table-builder.js') }}"></script>
+<script src="{{ url_for('static', filename='js/schedule/schedule-renderer.js') }}"></script>
+<script src="{{ url_for('static', filename='js/schedule/teachers-panel.js') }}"></script>
+<script src="{{ url_for('static', filename='js/schedule/modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/schedule/form-handlers.js') }}"></script>
+<script src="{{ url_for('static', filename='js/schedule/schedule.js') }}"></script>
 {% endblock %}

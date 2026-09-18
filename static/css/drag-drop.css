@@ -1,4 +1,4 @@
-/* --- Стили для Drag & Drop --- */
+/* Стили для Drag & Drop */
 .panel-subject[draggable="true"],
 .lesson-card[draggable="true"] {
     cursor: grab;
