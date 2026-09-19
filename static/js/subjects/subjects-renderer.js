@@ -14,21 +14,19 @@ function displaySubjects(subjects) {
     
     container.innerHTML = subjects.map(subject => {
         // получение списка преподавателей дисциплины
-        const subjectTeachers = (subject.teacher_ids || [])
-            .map(id => teacherMap[id])
-            .filter(t => t !== undefined);
+        const subjectTeachers = (subject.teacher_ids || []).map(id => teacherMap[id]).filter(t => t !== undefined);
         
-        const teachersHtml = subjectTeachers.length > 0 ? 
-            subjectTeachers.map(t => `<span class="teacher-tag" style="background-color: ${t.color}20; border-color: ${t.color}">${t.short_name}</span>`).join('') : 
-            '<span class="no-teachers">Нет преподавателей</span>';
+        const teachersHtml = subjectTeachers.length > 0
+            ? subjectTeachers.map(t => `<span class="teacher-tag" style="color: ${t.color || 'var(--color-secondary)'}; border-color: ${t.color || 'var(--color-light)'};">${t.short_name}</span>`).join('')
+            : '<span class="no-teachers">Нет преподавателей</span>';
         
         return `
-            <div class="card subject-card" data-id="${subject.id}">
+            <div class="card subject-card" data-id="${subject.id}" style="border-color: ${subject.color || 'var(--color-light)'};">
                 <h3>
                     <span class="subject-color-dot" style="background-color: ${subject.color || '#95a5a6'}"></span>
                     ${subject.name}
                 </h3>
-                <p><strong>Код:</strong> ${subject.short_name}</p>
+                <p>${subject.short_name}</p>
                 <div class="subject-teachers">
                     <strong>Преподаватели:</strong>
                     <div class="teachers-list">${teachersHtml}</div>
@@ -55,7 +53,7 @@ function displayTeachersCheckboxes() {
         <label class="checkbox-label">
             <input type="checkbox" name="teacher" value="${teacher.id}">
             <span class="teacher-color-indicator" style="background-color: ${teacher.color}"></span>
-            ${teacher.name} (${teacher.short_name})
+            <span class="checkbox-text">${teacher.name} (${teacher.short_name})</span>
         </label>
     `).join('');
 }

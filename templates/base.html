@@ -4,23 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Расписание{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cards.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/schedule.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/teachers-panel.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/subjects.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/notifications.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/drag-drop.css') }}">
 </head>
 <body>
-    <!-- кнопка меню -->
-    <button class="menu-toggle" id="menuToggle">☰</button>
-    
+    <!-- шапка сайта -->
+    <header class="topbar">
+        <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню">
+            <img src="static\icons\Menu.svg" alt="">
+        </button>
+        <h1 class="topbar-title">{% block page_title %}{{ self.title() }}{% endblock %}</h1>
+        <div class="topbar-actions">
+            {% block header_actions %}{% endblock %}
+        </div>
+    </header>
+
+    <!-- затемнение под меню -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <!-- меню -->
     <nav class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h2>Меню</h2>
-            <button class="close-menu" id="closeMenu">×</button>
-        </div>
         <ul class="nav-links">
-            <li><a href="{{ url_for('schedule_page') }}">Расписание</a></li>
-            <li><a href="{{ url_for('groups_page') }}">Группы</a></li>
-            <li><a href="{{ url_for('teachers_page') }}">Преподаватели</a></li>
-            <li><a href="{{ url_for('subjects_page') }}">Дисциплины</a></li>
+            <li><a href="{{ url_for('schedule_page') }}" class="{% if active_page == 'schedule' %}active{% endif %}">Расписание занятий</a></li>
+            <li><a href="{{ url_for('groups_page') }}" class="{% if active_page == 'groups' %}active{% endif %}">Группы</a></li>
+            <li><a href="{{ url_for('teachers_page') }}" class="{% if active_page == 'teachers' %}active{% endif %}">Преподаватели</a></li>
+            <li><a href="{{ url_for('subjects_page') }}" class="{% if active_page == 'subjects' %}active{% endif %}">Дисциплины</a></li>
         </ul>
     </nav>
     

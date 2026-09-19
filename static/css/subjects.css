@@ -1,36 +1,40 @@
-/* Цветной кружок для дисциплины в карточке и панели */
 .subject-color-dot {
     display: inline-block;
-    width: 14px;
-    height: 14px;
+    width: 0.875rem;
+    height: 0.875rem;
     border-radius: 50%;
-    margin-right: 8px;
+    margin-right: 0.5rem;
     vertical-align: middle;
-    border: 1px solid rgba(0,0,0,0.1);
+    border: 0.0625rem solid rgba(0,0,0,0.1);
 }
 
-/* Выравнивание заголовка в карточке дисциплины */
+/* выравнивание заголовка в карточке дисциплины */
 .subject-card h3 {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 0.625rem;
 }
 
-/* Выравнивание предмета в панели преподавателей */
+/* контур карточки дисциплины совпадает с её цветом */
+.subject-card {
+    border-top-width: 0.25rem;
+}
+
+/* выравнивание предмета в панели преподавателей */
 .panel-subject {
     display: flex;
     align-items: center;
-    padding: 6px 10px;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-bottom: 5px;
-    cursor: grab; /* Курсор для Drag & Drop */
-    font-size: 13px;
-    transition: background 0.2s;
+    padding: 0.375rem 0.625rem;
+    background: var(--color-white);
+    border: 0.0625rem solid var(--color-light);
+    border-radius: 0.375rem;
+    margin-bottom: 0.3125rem;
+    cursor: grab; /* курсор при перетаскивании карточки */
+    font-size: 0.8125rem;
+    transition: background 0.2s, border-color 0.2s;
 }
 
 .panel-subject:hover {
-    background: #e8f4f8;
-    border-color: #3498db;
+    background: var(--color-bg);
+    border-color: var(--color-primary);
 }

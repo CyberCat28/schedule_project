@@ -65,6 +65,15 @@ function closeModalHandler() {
     editingLessonId = null;
 }
 
+// заполнение выпадающего списка групп в модальном окне
+function populateGroupSelect() {
+    const groupSelect = document.getElementById('lessonGroup');
+    if (!groupSelect) return;
+
+    groupSelect.innerHTML = '<option value="">Выберите группу</option>' +
+        allGroups.map(g => `<option value="${g.id}">${g.name}</option>`).join('');
+}
+
 async function updateSubjectsSelect() {
     const teacherId = document.getElementById('lessonTeacher').value;
     const subjectSelect = document.getElementById('lessonSubject');

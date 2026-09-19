@@ -51,7 +51,7 @@ function displayGroups(groups) {
     }
     
     container.innerHTML = groups.map(group => `
-        <div class="card" data-id="${group.id}">
+        <div class="card group-card" data-id="${group.id}">
             <h3>${group.name}</h3>
             <p><strong>Специальность:</strong> ${group.speciality}</p>
             <p><strong>Курс:</strong> ${group.course}</p>

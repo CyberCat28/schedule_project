@@ -1,22 +1,19 @@
-/* --- Стили для Drag & Drop --- */
-.panel-subject[draggable="true"],
-.lesson-card[draggable="true"] {
+.panel-subject[draggable="true"], .lesson-card[draggable="true"] {
     cursor: grab;
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.panel-subject[draggable="true"]:active,
-.lesson-card[draggable="true"]:active {
+.panel-subject[draggable="true"]:active, .lesson-card[draggable="true"]:active {
     cursor: grabbing;
 }
 
 .lesson-card[draggable="true"]:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transform: translateY(-0.125rem);
+    box-shadow: 0 0.25rem 0.625rem rgba(0,0,0,0.15);
 }
 
 .lesson-cell.drag-over {
-    background-color: #e8f4f8 !important;
-    border: 2px dashed #3498db !important;
-    box-shadow: inset 0 0 10px rgba(52, 152, 219, 0.2);
+    background-color: #dde3ee !important;
+    border: 0.125rem dashed var(--color-primary) !important;
+    box-shadow: inset 0 0 0.625rem rgba(19, 44, 84, 0.15);
 }

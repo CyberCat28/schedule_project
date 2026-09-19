@@ -4,14 +4,14 @@ function showNotification(message, type = 'info') {
     notification.className = `notification notification-${type}`;
     
     const icons = {
-        success: 'Готово:',
-        error: 'Ошибка:',
-        warning: 'Предупреждение:',
-        info: 'Информация:'
+        success: '<img src="/static/icons/Check.svg" alt="Готово">',
+        error: '<img src="/static/icons/error.svg" alt="Ошибка">',
+        warning: '<img src="/static/icons/Alert.svg" alt="Предупреждение">',
+        info: '<img src="/static/icons/Alert.svg" alt="Информация">'
     };
 
     notification.innerHTML = `
-        <span class="notification-icon">${icons[type] || 'Информация'}</span>
+        <span class="notification-icon">${icons[type] || icons.info}</span>
         <span class="notification-message">${message}</span>
         <button class="notification-close">&times;</button>
     `;

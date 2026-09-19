@@ -3,9 +3,7 @@
 {% block title %}Дисциплины{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>Дисциплины</h1>
-    
+<div class="container">    
     <!-- форма добавления/редактирования -->
     <div class="form-section">
         <h2 id="formTitle">Добавить дисциплину</h2>
@@ -18,6 +16,10 @@
             <div class="form-group">
                 <label>Сокращённое название:</label>
                 <input type="text" id="subjectShortName" required placeholder="ИНФ" maxlength="10">
+            </div>
+            <div class="form-group">
+                <label>Цвет дисциплины:</label>
+                <input type="color" id="subjectColor" value="#3498db" class="color-picker-large">
             </div>
             <div class="form-group">
                 <label>Преподаватели (можно выбрать несколько):</label>
@@ -37,5 +39,8 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/subjects.js') }}"></script>
+<script src="{{ url_for('static', filename='js/subjects/subjects-data.js') }}"></script>
+<script src="{{ url_for('static', filename='js/subjects/subjects-renderer.js') }}"></script>
+<script src="{{ url_for('static', filename='js/subjects/subjects-form.js') }}"></script>
+<script src="{{ url_for('static', filename='js/subjects/subjects.js') }}"></script>
 {% endblock %}

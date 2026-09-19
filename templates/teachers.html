@@ -4,8 +4,6 @@
 
 {% block content %}
 <div class="container">
-    <h1>Преподаватели</h1>
-    
     <!-- форма добавления/редактирования -->
     <div class="form-section">
         <h2 id="formTitle">Добавить преподавателя</h2>
@@ -13,11 +11,11 @@
             <input type="hidden" id="teacherId">
             <div class="form-group">
                 <label>ФИО:</label>
-                <input type="text" id="teacherName" required placeholder="Иванов Сергей Владимирович">
+                <input type="text" id="teacherName" required placeholder="Иванов Иван Иванович">
             </div>
             <div class="form-group">
                 <label>Краткое обозначение:</label>
-                <input type="text" id="teacherShortName" required placeholder="ИВ" maxlength="20">
+                <input type="text" id="teacherShortName" required placeholder="Иванов И.И." maxlength="20">
             </div>
             <div class="form-group">
                 <label>Контактная информация:</label>
@@ -45,5 +43,8 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/teachers.js') }}"></script>
+<script src="{{ url_for('static', filename='js/teachers/teachers-data.js') }}"></script>
+<script src="{{ url_for('static', filename='js/teachers/teachers-renderer.js') }}"></script>
+<script src="{{ url_for('static', filename='js/teachers/teachers-form.js') }}"></script>
+<script src="{{ url_for('static', filename='js/teachers/teachers.js') }}"></script>
 {% endblock %}

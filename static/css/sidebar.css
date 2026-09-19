@@ -1,48 +1,52 @@
-/* Боковое меню */
 .menu-toggle {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 1000;
-    padding: 10px 15px;
-    font-size: 24px;
-    background: #3498db;
-    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5vw;
+    height: 5vh;
+    background: none;
     border: none;
-    border-radius: 5px;
+    border-radius: 0.5rem;
     cursor: pointer;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+}
+
+.menu-toggle:hover {
+    opacity: 0.7;
+}
+
+/* затемнение под меню */
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(19, 44, 84, 0.45);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 1001;
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
 }
 
 .sidebar {
     position: fixed;
     top: 0;
-    left: -300px;
-    width: 300px;
+    left: -18.75vw;
+    width: 18.75vw;
     height: 100vh;
-    background: #2c3e50;
-    color: white;
+    background: var(--color-primary);
     transition: left 0.3s ease;
-    z-index: 1001;
-    padding: 20px;
+    z-index: 1002;
+    padding: 1.25rem;
+    box-shadow: 0.125rem 0 1rem rgba(19, 44, 84, 0.3);
 }
 
 .sidebar.active {
     left: 0;
-}
-
-.sidebar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-}
-
-.close-menu {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 30px;
-    cursor: pointer;
 }
 
 .nav-links {
@@ -50,19 +54,28 @@
 }
 
 .nav-links li {
-    margin-bottom: 15px;
+    margin-bottom: 0.5rem;
 }
 
 .nav-links a {
-    color: white;
+    color: var(--color-light);
     text-decoration: none;
-    font-size: 18px;
+    font-size: 1rem;
     display: block;
-    padding: 10px;
-    border-radius: 5px;
-    transition: background 0.3s;
+    padding: 0.75rem 0.875rem;
+    border-radius: 0.5rem;
+    border-left: 0.1875rem solid transparent;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .nav-links a:hover {
-    background: #34495e;
+    background: rgba(83, 101, 131, 0.45);
+    color: var(--color-white);
+}
+
+.nav-links a.active {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-left-color: var(--color-light);
+    font-weight: 600;
 }
