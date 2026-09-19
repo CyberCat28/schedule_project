@@ -49,8 +49,8 @@ def create_lesson():
             'teacher_id': data['teacher_id'],
             'subject_id': data['subject_id'],
             'classroom_id': data.get('classroom_id', ''),
-            'day': data['day'],  # 0-5 (Пн-Сб)
-            'week1_lesson': data.get('week1_lesson', 0),  # 0-6 (номер пары, 0 = нет)
+            'day': data['day'],
+            'week1_lesson': data.get('week1_lesson', 0),
             'week2_lesson': data.get('week2_lesson', 0),
             'lesson_type': data.get('lesson_type', 'Лекция')
         }

@@ -54,7 +54,7 @@ function bindModalHandlers() {
     if (lessonTeacher) lessonTeacher.addEventListener('change', updateSubjectsSelect);
 }
 
-// Обработчик кнопки экспорта
+// обработчик кнопки экспорта
 const exportBtn = document.getElementById('exportBtn');
 if (exportBtn) exportBtn.addEventListener('click', async function() {
     try {
@@ -66,10 +66,10 @@ if (exportBtn) exportBtn.addEventListener('click', async function() {
             throw new Error('Ошибка при экспорте');
         }
         
-        // Получение blob-данных
+        // получение blob-данных
         const blob = await response.blob();
         
-        // Создание ссылки для скачивания
+        // создание ссылки для скачивания
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -77,7 +77,7 @@ if (exportBtn) exportBtn.addEventListener('click', async function() {
         document.body.appendChild(a);
         a.click();
         
-        // Очистка
+        // очистка
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
         

@@ -8,17 +8,16 @@ import io
 export_bp = Blueprint('export', __name__)
 
 COLORS = {
-    'header_bg': '132C54',   # тёмно-синяя шапка (как .time-header)
-    'group_bg': '536583',    # заголовки групп (как .group-header)
-    'day_bg': '132C54',      # строки дней (как .day-name)
-    'pair_bg': 'F4F6FA',     # столбец с парами (как .pair-number)
+    'header_bg': '132C54',   # тёмно-синяя шапка
+    'group_bg': '536583',    # заголовки групп
+    'day_bg': '132C54',      # строки дней
+    'pair_bg': 'F4F6FA',     # столбец с парами
     'white': 'FFFFFF',
     'text_dark': '132C54',   # основной текст
-    'text_light': '536583',  # приглушённый текст (время пар)
-    'border': 'D0D5DD'       # цвет границ (как --color-light)
+    'text_light': '536583',  # приглушённый текст
+    'border': 'D0D5DD'       # цвет границ
 }
 
-# Время проведения пар (4 пары вместо 6)
 LESSON_TIMES = [
     {1: '9:00 - 10:35'},
     {2: '10:45 - 12:20'},
@@ -180,7 +179,7 @@ def export_to_excel():
         for day_idx, day in enumerate(days):
             day_start = current_row
 
-            # Строка дня объединяется по всей ширине таблицы.
+            # cтрока дня объединяется по всей ширине таблицы
             ws.merge_cells(start_row=current_row, start_column=1, end_row=current_row,end_column=len(groups) + 1)
             day_cell = ws.cell(row=current_row, column=1, value=day)
             day_cell.font = Font(bold=True, color=COLORS['white'], size=12)
@@ -197,7 +196,7 @@ def export_to_excel():
             current_row += 1
 
             for pair in range(1, 5):
-                # Получаем время для этой пары
+                # получение времени для этой пары
                 lesson_time = ''
                 for time_dict in LESSON_TIMES:
                     if pair in time_dict:
@@ -329,7 +328,7 @@ def export_to_excel():
 
                 current_row += subrows
 
-        # Размеры
+        # размеры
         ws.column_dimensions['A'].width = 18.0
 
         for col in range(2, len(groups) + 2):

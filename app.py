@@ -12,7 +12,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     
-    # инициализация аirebase
+    # инициализация fаirebase
     cred = credentials.Certificate(app.config['FIREBASE_CREDENTIALS'])
     firebase_admin.initialize_app(cred)
     
