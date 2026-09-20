@@ -16,11 +16,10 @@
     opacity: 0.7;
 }
 
-/* затемнение под меню */
 .sidebar-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(19, 44, 84, 0.45);
+    background: rgba(0, 0, 0, 0.45);
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -42,7 +41,6 @@
     transition: left 0.3s ease;
     z-index: 1002;
     padding: 1.25rem;
-    box-shadow: 0.125rem 0 1rem rgba(19, 44, 84, 0.3);
 }
 
 .sidebar.active {
