@@ -1,6 +1,13 @@
 # schedule_project
 
-нужно добавить файлы с подключением к firebase (в репозитории их нет), нынешний дизайн отличается от итогового и будет переделан.
+**Инструкция по запуску приложения:**
+1. В файл firebase_config.js добавьте данные своей бд из firebase (setings/general)
+   <img width="1919" height="955" alt="Снимок экрана 2026-09-22 194920" src="https://github.com/user-attachments/assets/5a9a1807-824d-4ed1-8996-b6182f90604a" />
+   
+2. В корневую папку проекта создайте и добавьте файл с приватным ключом из firebase (setings/service accounts)
+   <img width="1919" height="949" alt="Снимок экрана 2026-09-22 195412" src="https://github.com/user-attachments/assets/22c21713-0acb-4d06-9ffc-c85daafe5d25" />
+
+3. В файл config.py добавьте название файла из пункта 3
 
 **Изменения за 15.09.2026:**
 1. Можно выбрать несколько преподавателей для дисциплины
